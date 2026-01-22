@@ -1,1 +1,9 @@
-<p>produit-list works!</p>
+<h1 class="title">Liste des produits</h1>
+<div class="liste">
+    <ul>
+        @for(produit of produits; track produit.id; let i=$index){
+            <app-produit-item-div [produit]="produit"></app-produit-item-div>
+        }
+    </ul>
+</div>
+<div class="footer">Le footer de la page</div>
