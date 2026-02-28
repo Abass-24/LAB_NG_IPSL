@@ -1,0 +1,16 @@
+.description-box {
+  width: 100%;
+  min-height: 100px;
+  white-space: pre-wrap;  /* Garde les sauts de ligne */
+  word-wrap: break-word;  /* Coupe les mots longs */
+}
+
+.description-empty {
+  font-style: italic;
+  color: #6c757d;
+}
+
+.description-filled {
+  font-style: normal;
+  color: inherit;
+}

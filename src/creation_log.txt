@@ -1,0 +1,25 @@
+Création: 20 fichiers
+Ignorés: 0 fichiers
+Erreurs: 0 fichiers
+
+FICHIERS CRÉÉS:
+- /media/kirito/4A04FDEF04FDDDBF/Users/hp 15/Documents/AUTRES/ING3_INFO/FRAMEWORK_DEV_WEB/LAB_NG_IPSL/src/app/models/categorie.model.ts
+- /media/kirito/4A04FDEF04FDDDBF/Users/hp 15/Documents/AUTRES/ING3_INFO/FRAMEWORK_DEV_WEB/LAB_NG_IPSL/src/app/data/categorie.data.ts
+- /media/kirito/4A04FDEF04FDDDBF/Users/hp 15/Documents/AUTRES/ING3_INFO/FRAMEWORK_DEV_WEB/LAB_NG_IPSL/src/app/services/categorie-service.service.ts
+- /media/kirito/4A04FDEF04FDDDBF/Users/hp 15/Documents/AUTRES/ING3_INFO/FRAMEWORK_DEV_WEB/LAB_NG_IPSL/src/app/models/produit.model.ts
+- /media/kirito/4A04FDEF04FDDDBF/Users/hp 15/Documents/AUTRES/ING3_INFO/FRAMEWORK_DEV_WEB/LAB_NG_IPSL/src/app/data/produit.data.ts
+- /media/kirito/4A04FDEF04FDDDBF/Users/hp 15/Documents/AUTRES/ING3_INFO/FRAMEWORK_DEV_WEB/LAB_NG_IPSL/src/app/services/produit-service.service.ts
+- /media/kirito/4A04FDEF04FDDDBF/Users/hp 15/Documents/AUTRES/ING3_INFO/FRAMEWORK_DEV_WEB/LAB_NG_IPSL/src/app/app.routes.ts
+- /media/kirito/4A04FDEF04FDDDBF/Users/hp 15/Documents/AUTRES/ING3_INFO/FRAMEWORK_DEV_WEB/LAB_NG_IPSL/src/app/app.html
+- /media/kirito/4A04FDEF04FDDDBF/Users/hp 15/Documents/AUTRES/ING3_INFO/FRAMEWORK_DEV_WEB/LAB_NG_IPSL/src/app/pages/categorie-list/categorie-list.html
+- /media/kirito/4A04FDEF04FDDDBF/Users/hp 15/Documents/AUTRES/ING3_INFO/FRAMEWORK_DEV_WEB/LAB_NG_IPSL/src/app/pages/categorie-list/categorie-list.ts
+- /media/kirito/4A04FDEF04FDDDBF/Users/hp 15/Documents/AUTRES/ING3_INFO/FRAMEWORK_DEV_WEB/LAB_NG_IPSL/src/app/pages/categorie-ajout/categorie-ajout.html
+- /media/kirito/4A04FDEF04FDDDBF/Users/hp 15/Documents/AUTRES/ING3_INFO/FRAMEWORK_DEV_WEB/LAB_NG_IPSL/src/app/pages/categorie-ajout/categorie-ajout.ts
+- /media/kirito/4A04FDEF04FDDDBF/Users/hp 15/Documents/AUTRES/ING3_INFO/FRAMEWORK_DEV_WEB/LAB_NG_IPSL/src/app/pages/produit-list/produit-list.html
+- /media/kirito/4A04FDEF04FDDDBF/Users/hp 15/Documents/AUTRES/ING3_INFO/FRAMEWORK_DEV_WEB/LAB_NG_IPSL/src/app/pages/produit-list/produit-list.ts
+- /media/kirito/4A04FDEF04FDDDBF/Users/hp 15/Documents/AUTRES/ING3_INFO/FRAMEWORK_DEV_WEB/LAB_NG_IPSL/src/app/pages/produit-ajout/produit-ajout.html
+- /media/kirito/4A04FDEF04FDDDBF/Users/hp 15/Documents/AUTRES/ING3_INFO/FRAMEWORK_DEV_WEB/LAB_NG_IPSL/src/app/pages/produit-ajout/produit-ajout.ts
+- /media/kirito/4A04FDEF04FDDDBF/Users/hp 15/Documents/AUTRES/ING3_INFO/FRAMEWORK_DEV_WEB/LAB_NG_IPSL/src/app/pages/produit-details/produit-details.html
+- /media/kirito/4A04FDEF04FDDDBF/Users/hp 15/Documents/AUTRES/ING3_INFO/FRAMEWORK_DEV_WEB/LAB_NG_IPSL/src/app/pages/produit-details/produit-details.ts
+- /media/kirito/4A04FDEF04FDDDBF/Users/hp 15/Documents/AUTRES/ING3_INFO/FRAMEWORK_DEV_WEB/LAB_NG_IPSL/src/app/pages/categorie-details/categorie-details.html
+- /media/kirito/4A04FDEF04FDDDBF/Users/hp 15/Documents/AUTRES/ING3_INFO/FRAMEWORK_DEV_WEB/LAB_NG_IPSL/src/app/pages/categorie-details/categorie-details.ts

@@ -1,0 +1,92 @@
+<div class="container">
+  <div class="card shadow-sm">
+    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+      <h4 class="mb-0">Détails de la catégorie</h4>
+      <a routerLink="/categories" class="btn btn-light btn-sm">
+        <i class="bi bi-arrow-left"></i> Retour
+      </a>
+    </div>
+    
+    @if (loading) {
+      <div class="text-center my-5">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Chargement...</span>
+        </div>
+      </div>
+    }
+
+    @if (!loading && categorie) {
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-12">
+            <table class="table table-borderless">
+              <tr>
+                <th class="w-25">ID :</th>
+                <td>{{ categorie.id }}</td>
+              </tr>
+              <tr>
+                <th>Nom :</th>
+                <td>{{ categorie.nom }}</td>
+              </tr>
+              <tr>
+                <th>Description :</th>
+                <td>{{ categorie.description || 'Aucune description' }}</td>
+              </tr>
+              <tr>
+                <th>Date création :</th>
+                <td>{{ categorie.createdAt | date:'dd/MM/yyyy HH:mm' }}</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+
+        <!-- Produits associés -->
+        <div class="mt-4">
+          <h5 class="border-bottom pb-2">Produits dans cette catégorie</h5>
+          @if (produitsDansCategorie.length > 0) {
+            <div class="table-responsive">
+              <table class="table table-sm table-hover">
+                <thead class="table-light">
+                  <tr>
+                    <th>ID</th>
+                    <th>Nom</th>
+                    <th>Prix</th>
+                    <th>Stock</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (produit of produitsDansCategorie; track produit.id) {
+                    <tr>
+                      <td>{{ produit.id }}</td>
+                      <td>{{ produit.nom }}</td>
+                      <td>{{ produit.prix | currency:'EUR' }}</td>
+                      <td>
+                        <span [class]="getStockClass(produit.quantite)">
+                          {{ produit.quantite }}
+                        </span>
+                      </td>
+                      <td>
+                        <a [routerLink]="['/produits', produit.id, 'details']" class="btn btn-sm btn-info">
+                          <i class="bi bi-eye"></i>
+                        </a>
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          } @else {
+            <p class="text-muted">Aucun produit dans cette catégorie</p>
+          }
+        </div>
+
+        <div class="d-flex justify-content-end gap-2 mt-4">
+          <a [routerLink]="['/categories', categorie.id]" class="btn btn-warning">
+            <i class="bi bi-pencil"></i> Modifier
+          </a>
+        </div>
+      </div>
+    }
+  </div>
+</div>

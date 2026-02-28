@@ -1,54 +1,101 @@
-import { Component } from '@angular/core';
-import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import {Produit} from '../../models/produit.model';
-import {ProduitService} from '../../services/produit-service.service';
-import {Router} from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router, ActivatedRoute, RouterLink } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { ProduitService } from '../../services/produit-service.service';
+import { CategorieService } from '../../services/categorie-service.service';
+import { Categorie } from '../../models/categorie.model';
 
 @Component({
-  selector: 'app-produit-ajout',
-  imports: [
-    ReactiveFormsModule
-  ],
-  standalone: true,
-  templateUrl: './produit-ajout.html',
-  styleUrl: './produit-ajout.scss',
+    selector: 'app-produit-ajout',
+    standalone: true,
+    imports: [ReactiveFormsModule, RouterLink, CommonModule],
+    templateUrl: './produit-ajout.html'
 })
-export class ProduitAjout {
+export class ProduitAjout implements OnInit {
+    produitForm: FormGroup;
+    isEditMode = false;
+    produitId: number | null = null;
+    categories: Categorie[] = [];
 
-
-    produitFrom=new FormGroup({
-      nom:new FormControl('', [Validators.required]),
-      prix:new FormControl('', [Validators.required]),
-      quantite:new FormControl('', [Validators.required]),
-      description:new FormControl(''),
-    });
-
-    constructor(private produitService: ProduitService, private router: Router) {
+    constructor(
+        private fb: FormBuilder,
+        private produitService: ProduitService,
+        private categorieService: CategorieService,
+        private router: Router,
+        private route: ActivatedRoute
+    ) {
+        this.produitForm = this.fb.group({
+            nom: ['', Validators.required],
+            prix: [0, [Validators.required, Validators.min(0)]],
+            quantite: [0, [Validators.required, Validators.min(0)]],
+            description: [''],
+            categories: [[]]
+        });
     }
 
-    ajoutProduit(){
-      const nom=this.produitFrom.controls['nom'].value;
+    ngOnInit(): void {
+        this.loadCategories();
+        
+        const id = this.route.snapshot.paramMap.get('id');
+        if (id) {
+            this.isEditMode = true;
+            this.produitId = +id;
+            this.loadProduit();
+        }
+    }
 
-      const prix=this.produitFrom.controls['prix']?.value;
-      const quantite=this.produitFrom.controls['quantite']?.value;
-      const description=this.produitFrom.controls['description'].value;
+    loadCategories(): void {
+        this.categorieService.getAll().subscribe({
+            next: (data) => {
+                this.categories = data;
+            }
+        });
+    }
 
-      if (nom && prix && quantite && quantite ) {
-        const produit: Produit ={
-          nom:nom,
-          prix:+prix,
-          quantite:+quantite,
-          description:description,
+    loadProduit(): void {
+        if (this.produitId) {
+            this.produitService.getById(this.produitId).subscribe({
+                next: (produit) => {
+                    if (produit) {
+                        this.produitForm.patchValue({
+                            nom: produit.nom,
+                            prix: produit.prix,
+                            quantite: produit.quantite,
+                            description: produit.description,
+                            categories: produit.categories || []
+                        });
+                    }
+                }
+            });
+        }
+    }
+
+    onSubmit(): void {
+        if (this.produitForm.invalid) {
+            // Marquer tous les champs comme touchés pour afficher les erreurs
+            Object.keys(this.produitForm.controls).forEach(key => {
+            this.produitForm.get(key)?.markAsTouched();
+            });
+            return;
         }
 
-        console.log(produit);
-
-        this.produitService.add(produit);
-        this.router.navigate(['/produits']);
-
-      }
-
-
+        if (this.produitForm.valid) {
+            const produit = this.produitForm.value;
+            
+            if (this.isEditMode && this.produitId) {
+                this.produitService.update({ ...produit, id: this.produitId }).subscribe({
+                    next: () => {
+                        this.router.navigate(['/produits']);
+                    }
+                });
+            } else {
+                this.produitService.add(produit).subscribe({
+                    next: () => {
+                        this.router.navigate(['/produits']);
+                    }
+                });
+            }
+        }
     }
-
 }

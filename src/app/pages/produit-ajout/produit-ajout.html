@@ -1,38 +1,63 @@
-
-
-<div>
-  <div class="page-titre">Ajout Nouveau produit</div>
-  <form [formGroup]="produitFrom">
-    <div class="form-element">
-      <span class="form-label">nom </span>
-      <input type="text" formControlName="nom">
+<div class="container">
+  <div class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+      <h4 class="mb-0">{{ isEditMode ? 'Modifier' : 'Ajouter' }} un produit</h4>
     </div>
+    <div class="card-body">
+      <form [formGroup]="produitForm" (ngSubmit)="onSubmit()">
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="nom" class="form-label">Nom <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" id="nom" formControlName="nom"
+                   [class.is-invalid]="produitForm.get('nom')?.invalid && produitForm.get('nom')?.touched">
+            @if (produitForm.get('nom')?.invalid && produitForm.get('nom')?.touched) {
+              <div class="invalid-feedback">Le nom est requis</div>
+            }
+          </div>
 
-      <div class="form-element">
-        <span class="form-label">prix </span>
-        <input type="text" formControlName="prix">
-      </div>
-
-
-
-
-        <div class="form-element">
-          <span class="form-label">quantite </span>
-          <input type="text" formControlName="quantite">
+          <div class="col-md-6 mb-3">
+            <label for="prix" class="form-label">Prix (€) <span class="text-danger">*</span></label>
+            <input type="number" class="form-control" id="prix" formControlName="prix" step="0.01"
+                   [class.is-invalid]="produitForm.get('prix')?.invalid && produitForm.get('prix')?.touched">
+            @if (produitForm.get('prix')?.invalid && produitForm.get('prix')?.touched) {
+              <div class="invalid-feedback">Prix invalide (minimum 0)</div>
+            }
+          </div>
         </div>
 
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="quantite" class="form-label">Quantité <span class="text-danger">*</span></label>
+            <input type="number" class="form-control" id="quantite" formControlName="quantite"
+                   [class.is-invalid]="produitForm.get('quantite')?.invalid && produitForm.get('quantite')?.touched">
+            @if (produitForm.get('quantite')?.invalid && produitForm.get('quantite')?.touched) {
+              <div class="invalid-feedback">Quantité invalide</div>
+            }
+          </div>
 
-    <div class="form-element">
-      <span class="form-label">description </span>
-      <input type="text" formControlName="description">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Catégories</label>
+            <select class="form-select" multiple formControlName="categories" size="3">
+              @for (categorie of categories; track categorie.id) {
+                <option [value]="categorie.id">{{ categorie.nom }}</option>
+              }
+            </select>
+            <small class="text-muted">Maintenez Ctrl pour sélectionner plusieurs catégories</small>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="description" class="form-label">Description</label>
+          <textarea class="form-control" id="description" rows="3" formControlName="description"></textarea>
+        </div>
+
+        <div class="d-flex justify-content-end gap-2">
+          <a routerLink="/produits" class="btn btn-secondary">Annuler</a>
+          <button type="submit" class="btn btn-primary" [disabled]="produitForm.invalid">
+            {{ isEditMode ? 'Modifier' : 'Ajouter' }}
+          </button>
+        </div>
+      </form>
     </div>
-
-
-    <button class="bouton-valider" (click)="ajoutProduit()">Valider</button>
-
-
-
-
-
-  </form>
+  </div>
 </div>

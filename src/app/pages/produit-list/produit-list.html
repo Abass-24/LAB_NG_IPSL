@@ -1,30 +1,123 @@
 <div class="container">
-  <h1 class="title">Liste des produits</h1>
-
-  <div class="liste-wrapper">
-    
-
-    <div class="table-header">
-      <div class="column-header id">ID</div>
-      <div class="column-header name">Nom du Produit</div>
-      <div class="column-header ">Prix</div>
-      <div class="column-header ">Quantité</div>
-      <div class="column-header ">Actions</div>
-    </div>
-
-    @if (loading) {
-      <div class="enChargement">
-        <span class="loader"></span>
-        Chargement des produits...
-      </div>
-    }
-
-    <ul class="liste">
-      @for (produit of produits; track produit.id; let i = $index) {
-        <app-produit-item-div [produit]="produit"></app-produit-item-div>
-      }
-    </ul>
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="text-primary">Liste des produits</h2>
+    <a routerLink="/produits/ajout" class="btn btn-success">
+      <i class="bi bi-plus-circle"></i> Nouveau produit
+    </a>
   </div>
 
-  <footer class="footer">Le footer de la page &copy; 2026</footer>
+  <!-- Filtres -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-6">
+          <label class="form-label">Rechercher</label>
+          <input type="text" class="form-control" placeholder="Nom du produit..." (input)="onSearch($event)">
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Filtrer par catégorie</label>
+          <select class="form-select" (change)="onCategoryFilter($event)">
+            <option value="">Toutes les catégories</option>
+            @for (cat of categories; track cat.id) {
+              <option [value]="cat.id">{{ cat.nom }}</option>
+            }
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  @if (loading) {
+    <div class="text-center my-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Chargement...</span>
+      </div>
+      <p class="mt-2">Chargement des produits...</p>
+    </div>
+  }
+
+  @if (errorMessage) {
+    <div class="alert alert-danger" role="alert">
+      {{ errorMessage }}
+    </div>
+  }
+
+  @if (!loading && !errorMessage) {
+    <div class="table-responsive">
+      <table class="table table-hover table-striped">
+        <thead class="table-primary">
+          <tr>
+            <th>ID</th>
+            <th>Nom</th>
+            <th>Prix</th>
+            <th>Stock</th>
+            <th>Catégories</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (produit of filteredProduits; track produit.id) {
+            <tr>
+              <td>{{ produit.id }}</td>
+              <td>
+                <a [routerLink]="['/produits', produit.id, 'details']" class="text-decoration-none">
+                  {{ produit.nom }}
+                </a>
+              </td>
+              <td>{{ produit.prix | currency:'EUR' }}</td>
+              <td>
+                <span [class]="getStockClass(produit.quantite)">
+                  {{ produit.quantite }}
+                </span>
+              </td>
+              <td>
+                @if (produit.categories && produit.categories.length > 0) {
+                  @for (catId of produit.categories; track catId) {
+                    <span class="badge bg-info me-1">{{ getCategorieName(catId) }}</span>
+                  }
+                } @else {
+                  <span class="badge bg-secondary">Non catégorisé</span>
+                }
+              </td>
+              <td>
+                <div class="btn-group" role="group">
+                  <a [routerLink]="['/produits', produit.id, 'details']" class="btn btn-sm btn-info" title="Détails">
+                    <i class="bi bi-eye"></i>
+                  </a>
+                  <a [routerLink]="['/produits', produit.id]" class="btn btn-sm btn-warning" title="Modifier">
+                    <i class="bi bi-pencil"></i>
+                  </a>
+                  <button (click)="openDeleteModal(produit)" class="btn btn-sm btn-danger" title="Supprimer"
+                          data-bs-toggle="modal" data-bs-target="#deleteModal">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>
+
+<!-- Modal de confirmation de suppression -->
+<div class="modal fade" id="deleteModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title text-danger">Confirmation</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        Êtes-vous sûr de vouloir supprimer le produit <strong>{{ produitToDelete?.nom }}</strong> ?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+        <button type="button" class="btn btn-danger" (click)="deleteProduit()" data-bs-dismiss="modal">
+          Supprimer
+        </button>
+      </div>
+    </div>
+  </div>
 </div>
