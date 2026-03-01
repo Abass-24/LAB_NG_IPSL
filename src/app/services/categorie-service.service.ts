@@ -1,40 +1,63 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { delay } from 'rxjs/operators';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
 import { Categorie } from '../models/categorie.model';
-import { CATEGORIES } from '../data/categorie.data';
+
+// Comment out mock data import
+// import { CATEGORIES } from '../data/categorie.data';
 
 @Injectable({
     providedIn: 'root'
 })
 export class CategorieService {
-    private categories: Categorie[] = CATEGORIES;
+    private apiUrl = 'http://localhost:8080/api/categories';
+    // private categories: Categorie[] = CATEGORIES; // replaced by backend
+
+    constructor(private http: HttpClient) {}
 
     getAll(): Observable<Categorie[]> {
-        return of(this.categories).pipe(delay(800));
+        return this.http.get<Categorie[]>(this.apiUrl).pipe(
+            map(data => data.map(item => ({ ...item, createdAt: new Date(item.createdAt) }))),
+            catchError(this.handleError)
+        );
     }
 
-    getById(id: number): Observable<Categorie | undefined> {
-        return of(this.categories.find(c => c.id === id)).pipe(delay(400));
+    getById(id: number): Observable<Categorie> {
+        return this.http.get<Categorie>(`${this.apiUrl}/${id}`).pipe(
+            map(item => ({ ...item, createdAt: new Date(item.createdAt) })),
+            catchError(this.handleError)
+        );
     }
 
     add(categorie: Categorie): Observable<Categorie> {
-        categorie.id = Date.now();
-        categorie.createdAt = new Date();
-        this.categories.push(categorie);
-        return of(categorie).pipe(delay(400));
+        return this.http.post<Categorie>(this.apiUrl, categorie).pipe(
+            map(item => ({ ...item, createdAt: new Date(item.createdAt) })),
+            catchError(this.handleError)
+        );
     }
 
     update(categorie: Categorie): Observable<Categorie> {
-        const index = this.categories.findIndex(c => c.id === categorie.id);
-        if (index !== -1) {
-            this.categories[index] = { ...this.categories[index], ...categorie };
-        }
-        return of(categorie).pipe(delay(400));
+        return this.http.put<Categorie>(`${this.apiUrl}/${categorie.id}`, categorie).pipe(
+            map(item => ({ ...item, createdAt: new Date(item.createdAt) })),
+            catchError(this.handleError)
+        );
     }
 
-    delete(id: number): Observable<boolean> {
-        this.categories = this.categories.filter(c => c.id !== id);
-        return of(true).pipe(delay(400));
+    delete(id: number): Observable<void> {
+        return this.http.delete<void>(`${this.apiUrl}/${id}`).pipe(
+            catchError(this.handleError)
+        );
+    }
+
+    private handleError(error: HttpErrorResponse) {
+        let errorMessage = 'An error occurred';
+        if (error.error instanceof ErrorEvent) {
+            errorMessage = `Error: ${error.error.message}`;
+        } else {
+            errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
+        }
+        console.error(errorMessage);
+        return throwError(() => new Error(errorMessage));
     }
 }
